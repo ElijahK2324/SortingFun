@@ -1,0 +1,544 @@
+package helloworld;
+
+import java.io.*;
+import java.util.*;
+
+public class SortingFun {
+	public static int get = 0;
+	public static int set = 0;
+	public static int count = 0;
+
+	public static void bubbleSort(int[] arr) { // method that takes in int arraylists a sorts the entire arraylist
+		int n = arr.length; // variable for the total amount of objects in the array list
+		int temp = 0; // temporary variable that serves as a comparision slot for the sorting
+		for (int i = 0; i < n; i++) { // for loop that loops for how many objects the array list has
+			for (int j = 1; j < (n - i); j++) { // for loop that loops through arraylist starting from the first index
+				get++;
+				count++;
+				if (arr[j - 1] > arr[j]) { // compares current index with the previous index to see if the previous is
+											// higher
+					// swap elements
+					temp = arr[j - 1]; // temporary variable that serves as the value of the previous index
+					arr[j - 1] = arr[j]; // sets the previous index to the current index
+					arr[j] = temp;// sets the current index to the previous index
+					set++;
+				}
+
+			}
+		}
+	}
+
+	// initalize the method insertion sort
+	public static void insertionSort(int array[]) {
+		// initalize n which stores the lenght of the array and judges length of the for
+		// loop
+		int n = array.length;
+
+		// iterate through the array
+		for (int j = 1; j < n; j++) {
+			get++;
+			count++;
+			// set the key equal to the starting number initally
+			int key = array[j];
+
+			// store the previous index of the array
+			int i = j - 1;
+
+			// compare the number at the current index to our key
+			// the key will constantly be the smallest number
+			while ((i > -1) && (array[i] > key)) {
+				array[i + 1] = array[i];
+				i--;
+				set++;
+				get++;
+				count++;
+			}
+			get++;
+			count++;
+			// at the end of the loop where we have found the next smallest number set it
+			// next in line
+			array[i + 1] = key;
+			set++;
+		}
+	}
+
+	public static void selectionSort(int[] arr) { // method that takes in an int array list arguement and sorts it
+		for (int i = 0; i < arr.length - 1; i++) {// runs through the entire array excluding the last index
+			int index = i;// temporary variable for the index
+			for (int j = i + 1; j < arr.length; j++) {// runs through entire array 1 from current index given by i
+				get++;
+				count++;
+				if (arr[j] < arr[index]) {// if statement that compares whether index ahead is lower than previous index
+					index = j;// searching for lowest index and setting index to j to temporarily set it later
+					set++;
+				}
+			}
+			int smallerNumber = arr[index]; // sets smaller number as a temporary variable
+			arr[index] = arr[i];
+			arr[i] = smallerNumber;// swaps lower number infront with high number in back to put it in increasing
+									// order
+			set++;
+		}
+	}
+	
+	/*
+	 * Merge sort works but seperating an array into two parts on being a left side and right side
+	 * this continues until it is broken down completely from then it starts
+	 * remaking the original array via comparing the broken down arrays to each other
+	 * working smallest to largest
+	*/
+
+	public static void merge(int arr[], int beg, int mid, int end) {
+		
+		int set = 0;
+		// all of this is breaking down the array into smaller arrays being a left and right side
+		// due to this taking a while depending on the size of the array there are for loops and a greater while loop
+		// to make sure everything is broken down into portions to compare later in the sort method down below 
+		int l = mid - beg + 1;
+		int r = end - mid;
+
+		int LeftArray[] = new int[l];
+		int RightArray[] = new int[r];
+
+		for (int i = 0; i < l; ++i)
+			LeftArray[i] = arr[beg + i];
+
+		for (int j = 0; j < r; ++j)
+			RightArray[j] = arr[mid + 1 + j];
+
+		int i = 0, j = 0;
+		int k = beg;
+		while (i < l && j < r) {
+			if (LeftArray[i] <= RightArray[j]) {
+				arr[k] = LeftArray[i];
+				set ++;
+				i++;
+			} else {
+				arr[k] = RightArray[j];
+				j++;
+				set ++;
+			}
+			k++;
+		}
+		while (i < l) {
+			arr[k] = LeftArray[i];
+			i++;
+			k++;
+			set ++;
+		}
+
+		while (j < r) {
+			arr[k] = RightArray[j];
+			j++;
+			k++;
+			set ++;
+		}
+	}
+
+	public static void mergeSort(int arr[], int beg, int end) {
+		// this remakes the larger array by comparing the smaller arrays and ordering smallest to larger
+		if (beg < end) {
+			int mid = (beg + end) / 2;
+			mergeSort(arr, beg, mid);
+			mergeSort(arr, mid + 1, end);
+			merge(arr, beg, mid, end);
+			
+			get ++;
+		}
+	}
+	
+	
+	// linear search starts from index 0 and checks every element if it matches if it does return index else -1
+	public static int linearSearch(int arr[], int x) 
+	{
+	    // interate through the array
+	    for(int i = 0; i < arr.length; i++) 
+	    { 
+	    	// compare each element to what we're looking for
+	        if(arr[i] == x) 
+	        {
+	        	// if it is what we're looking for return the element
+	            return i; 
+	        }
+
+	    } 
+	    
+	    // if the element is not found return -1 
+	    return -1; 
+	} 
+	  
+	// iterative binary search seperating array into left and right side 
+	// depending on if the middle is smaller or greaater than the value we're looking for 
+    public static int binaryIterative(int arr[], int x) 
+    { 
+    	// set the min and max or the array l is first index r is last index
+        int l = 0, r = arr.length - 1; 
+        
+        // instead of recusively calling the binary search a while loop is used instead
+        while (l <= r) { 
+        	// initalize the middle of the array
+            int m = l + (r - l) / 2; 
+  
+            // Check if x is present at mid 
+            if (arr[m] == x) 
+                return m; 
+  
+            // If x greater than mid ignore left half
+            if (arr[m] < x) 
+                l = m + 1; 
+  
+            // If x is smaller than mid ignore right half 
+            else
+                r = m - 1; 
+        } 
+
+        // if the element wasn't present in the list at all return -1 
+        return -1; 
+    } 
+	
+	/*
+	 * A binary sort takes an array and finds the middle of it 
+	 * it then checks if the thing we're looking for is at the middle index
+	 * if not it checks if it is greater than or less than the middle index
+	 * if it is greater than we discard the left (l) and vice versa if it is smaller than
+	 * this circle repeats until the number is either not found or present at the middle index 
+	 * arr[] = sorted array to search in
+	 * l = left side
+	 * r = right side 
+	 * x = look for
+	*/
+	public static int binaryRecursive(int arr[], int l, int r, int x) 
+	{ 
+		if (r >= l) { 
+			// find our new middle
+			int mid = l + (r - l) / 2; 
+
+			// If x (what we look for) is present at the middle return the middle index
+			if (arr[mid] == x) 
+				return mid; 
+
+			// recursively call binary search looking only to the left of middle index
+			if (arr[mid] > x) 
+				return binaryRecursive(arr, l, mid - 1, x); 
+
+			// recursively call binary search looking only to the right of middle index
+			return binaryRecursive(arr, mid + 1, r, x); 
+		} 
+
+		// if the number is not present at all return -1
+		return -1; 
+	} 
+
+		
+	public static int partition(int arr[], int low, int high) 
+	{ 
+		/*
+		 * This is the partition portion of the quick sort 
+		 * places all elements bigger than the pivot (usually last element)
+		 * to the right of the pivot and vice versa for smaller elements 
+		*/
+		int pivot = arr[high]; // first pivot used is the higher index ( usually use the last value as the pivot 
+		int iprevious = (low-1); // second pivot is the low 
+		
+		for (int j=low; j<high; j++) // iterate through the array while the lower pivot is less than the higher one
+		{ 
+			// If current index has a smaller value than the pivot 
+			if (arr[j] < pivot) 
+			{ 
+				iprevious++; // move on 
+				
+				// swap values at the index of i and j
+				int temp = arr[iprevious]; 
+				arr[iprevious] = arr[j]; 
+				arr[j] = temp; 			
+			} 
+		} 
+
+		// swap the values of the previous index and the pivot
+		int temp = arr[iprevious+1]; 
+		arr[iprevious+1] = arr[high]; 			
+		arr[high] = temp; 
+
+			return iprevious+1; 
+	} 
+	
+	/*
+	 * Creates the quick sort method which uh sorts arrays very quickly 
+	 * ARGUMENTS
+	 * arr[] array to sort
+	 * low = 1st pivot 
+	 * high = 2nd pivot to sort around
+	 */
+	public static void quickSort(int arr[], int low, int high) 
+	{ 
+		
+		if (low < high) 
+		{ 
+			/* pi is partitioning index, arr[pi] is 
+			now at right place */
+			int pi = partition(arr, low, high); 
+
+			// Recursively sort elements before 
+			// partition and after partition 
+			quickSort(arr, low, pi-1); 
+			quickSort(arr, pi+1, high); 
+		} 
+	} 
+	
+	public static boolean isSorted(int arr[])
+	{
+		boolean check = false;
+		/// iterate through the array 
+		for(int i = 0; i < (arr.length - 1); i ++)
+		{
+			// check if it is indeed sorted
+			if(i != 0)
+			{
+				if(arr[i-1] <= arr[i])
+				check = true;
+				else
+				check = false;
+			}
+		}
+		// return whether it is true or not 
+		return check;
+		
+	}
+	
+	/// extra function to print arrays up to a character limit so they dont go off screen
+	// arr = array to print
+	// indent = character limit 
+	public static void printArray(int arr[], int indent)
+	{
+		for (int i : arr)
+		{
+			if(indent != 30) 
+			{
+				System.out.print(i + " ");	
+				indent ++;
+			}
+			else 
+			{
+				System.out.print("\n");
+				indent = 0;
+			}
+			
+		}
+	}
+
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		// creates an array the size dictated by the user values ranging from 1 - 100
+		Scanner input = new Scanner(System.in);
+		
+		// checks to see if a search or sort is preformed (different output)
+		Boolean search = false;
+		
+		// initalize what number to look for and index for later
+		int lookFor = 0;
+		int index = 0;
+		
+		//make new array specific size
+		System.out.println("Enter array size");
+		int len = input.nextInt();
+		int[] numAr = new int[len];
+
+		// build the array with numbers from 1-100
+		for (int i = 0; i < len; i++) {
+			int num = (int) (Math.random() * 100);
+			numAr[i] = num;
+		}
+
+		System.out.println("select sort type or 0 to exit"
+						 + "\n - Sorts - "
+						 + "\n0. exit"
+						 + "\n1. bubble sort"
+						 + "\n2. insertion sort"
+						 + "\n3. select sort"
+						 + "\n4. merge sort"
+						 + "\n5. quick sort \n"
+						 + "\n - Searches -  ( Binary Searches need to be preSorted!!)"
+						 + "\n6. linear search"
+						 + "\n7. Binary search Iterative"
+						 + "\n8. Binary Search Recursive");
+		
+		// take the users next input
+		int choice = input.nextInt();
+
+		System.out.println("\nUnsorted Array: --------------------------------------------------------------------------------------------");
+		printArray(numAr,30);
+		System.out.println("\n");
+
+		/*
+		 * This while loops organizes which choice the user made 
+		 * stating their decision and beginning the process of init array
+		*/
+		while (choice != 0) {
+			if (choice == 1) {
+				System.out.println("\nBubble Sort Selected");
+				bubbleSort(numAr);
+			} // end bubble sort
+			if (choice == 2) {
+				System.out.println("\nInsertion Sort Selected");
+				insertionSort(numAr);
+			}
+			if (choice == 3) {
+				System.out.println("\nSelection Sort Selected");
+				selectionSort(numAr);
+			}
+			if (choice == 4) {
+				System.out.println("\nMerge Sort Selected");
+				mergeSort(numAr, 0, numAr.length - 1);
+			}
+			if (choice == 5) 
+			{
+				System.out.println("Quick Sort Selected");
+				quickSort(numAr, 0, numAr.length - 1);
+			}
+			if (choice == 6)
+			{
+				// lets us know we are doing a search 
+				search = true;
+				
+				// prompt user for input
+				System.out.println("Linear Search Selected");
+				System.out.println("what number are you looking for?");
+				lookFor = input.nextInt();
+				index = linearSearch(numAr,lookFor);
+				
+				
+			}
+			if (choice == 7) 
+			{
+				search = true;
+				System.out.println("Binary Search Iterative Selected");
+				System.out.println("Checking if sorted...");
+				if(isSorted(numAr))
+				{
+					System.out.println("Array is sorted");
+					// take the number the user is looking for as input 
+					System.out.println("what number are you looking for in this array?");
+					lookFor = input.nextInt();
+					if(lookFor == (int)lookFor)
+					{
+						// this checks if lookfor is indeed an interger if so continue on
+						System.out.println("All checks completed! Running sort...");
+						
+						// find the index of the number we're looking for 
+						index = binaryIterative(numAr,lookFor);
+						
+					}
+					else
+					{
+						// if not valid interger exit (itll probably do this anyway though )
+						System.out.println("Not a valid Interger. exiting...");
+						return;
+					}
+				}
+				else
+				{
+					// if not sorted exit 
+					System.out.println("Array is not sorted.. exiting program...");
+					return;
+				}
+				
+			}
+			if (choice == 8) 
+			{
+				search = true;
+				System.out.println("Binary Search Recursive Selected");
+				System.out.println("Checking if sorted...");
+				// check if sorted
+				if (isSorted(numAr))
+				{
+					System.out.println("Array is Sorted");
+					
+					// take the number the user is looking for as input 
+					System.out.println("what number are you looking for in this array?");
+					lookFor = input.nextInt();
+					if(lookFor == (int)lookFor)
+					{
+						// this checks if lookfor is indeed an interger if so continue on
+						System.out.println("All checks completed! Running sort...");
+						index = binaryRecursive(numAr,0,(numAr.length-1),lookFor);
+						
+					}
+					else
+					{
+						System.out.println("Not a valid Interger. exiting...");
+						return;
+					}
+				}
+
+				else
+				{
+					System.out.println("array not sorted exiting...");
+					return;
+				}
+					
+				
+			}
+			
+			// only run this if doing a sort and not a search 
+			if (search == true)
+			{
+				// print the sorted array
+				System.out.println("\nPrinted Array: --------------------------------------------------------------------------------------------");
+				printArray(numAr,30);
+				
+				if(index != -1)
+				{
+					// state what index the number was found at
+					System.out.println("\nThe first instance of your number: " + lookFor + " was found at index " + index);
+					search = false;
+				}
+				
+				else
+				{
+					System.out.println("\nYour number is not presesnt in this array");
+					search = false;
+				}
+			}
+			else
+			{
+				// after array is sorted print the array as well as the number of gets and sets
+				System.out.println("\nSorted array: --------------------------------------------------------------------------------------------");
+				printArray(numAr, 30);
+				
+				/// do something different if doing doing a binary search intead 
+				/// print out number of comparisons, gets and sets for the sorts
+				System.out.print("\n\nComparisons:\n" + count);
+				System.out.print("\n\nGet:\n" + get);
+				System.out.print("\n\nSet:\n" + set);
+				count = 0;
+				get = 0;
+				set = 0;
+			}
+			
+
+			
+			// prompt the user yet again if they wish to continue else quit
+
+			//print sorts
+			System.out.println("\n - Sorts -");
+			System.out.println("\nSelect sort type or 0 to exit");
+			System.out.println("0. exit");
+			System.out.println("1. bubble sort");
+			System.out.println("2. insertion sort");
+			System.out.println("3. select sort");
+			System.out.println("4. merge sort");
+			System.out.println("5. quick sort");
+			
+			// print searches 
+			System.out.println("\n - Searches -");
+			System.out.println("6. linear Search");
+			System.out.println("7. Binary Search Iterative");
+			System.out.println("8. Binary Search Recursive");
+			choice = input.nextInt();
+		} // end while
+		System.out.println("Goodbye!");
+	}
+	
+}
